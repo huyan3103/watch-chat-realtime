@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "server": "nodemon server/server.js",
+    "dev": "concurrently \"nodemon server/server.js\" \"yarn --cwd client start\""
+  },
+  "dependencies": {
+    "concurrently": "^6.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "socket.io": "^4.2.0"
+  },
+  "name": "a",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
