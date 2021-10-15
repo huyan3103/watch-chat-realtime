@@ -1,13 +1,24 @@
+require("dotenv").config()
 const express = require("express")
+const mongoose = require("mongoose")
 const app = express()
 const cors = require("cors")
 const { Server } = require("socket.io")
+const accountRoute = require("./Route/accountRoute")
+
+// console.log(process.env.DB_STRING)
+
+mongoose.connect("mongodb://localhost:27017/watch-chat-realtime", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
 app.use(cors())
+app.use(express.json())
 
-app.get("/", (req, res) => {
-  res.json("OK")
-})
+// app.get("/", (req, res) => {
+//   res.json("OK")
+// })
 
 const io = new Server(
   app.listen("5000", () => console.log("Server is running")),
@@ -46,3 +57,5 @@ io.on("connection", (socket) => {
     socket.to(room).emit("chatCame", { username, chat })
   })
 })
+
+app.use("/account", accountRoute)

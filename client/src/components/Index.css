@@ -11,6 +11,11 @@
 .join-room input {
   width: 270px;
   font-size: 20px;
+  border: 0.5px solid black;
+}
+
+.join-room input:focus {
+  outline: none;
 }
 
 .join-room button {
@@ -19,6 +24,12 @@
   height: 30px;
   margin-left: auto;
   font-size: 17px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.join-room button:active {
+  background-color: rgb(172, 172, 172);
 }
 
 .create-room {

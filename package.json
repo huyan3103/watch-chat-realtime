@@ -4,10 +4,18 @@
     "dev": "concurrently \"nodemon server/server.js\" \"yarn --cwd client start\""
   },
   "dependencies": {
+    "@craco/craco": "^6.3.0",
+    "autoprefixer": "^9",
+    "bcrypt": "^5.0.1",
     "concurrently": "^6.2.2",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "socket.io": "^4.2.0"
+    "joi": "^17.4.2",
+    "mongoose": "^6.0.10",
+    "postcss": "^7",
+    "socket.io": "^4.2.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "name": "a",
   "version": "1.0.0",

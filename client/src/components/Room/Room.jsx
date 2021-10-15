@@ -1,6 +1,7 @@
 import React from "react"
 import "./Room.css"
 import { Chat } from "./Chat"
+import { Participant } from "./Participant"
 import ReactPlayer from "react-player/youtube"
 import io from "socket.io-client"
 import { useParams } from "react-router-dom"
@@ -9,8 +10,8 @@ const socket = io("localhost:5000", { withCredentials: true })
 export const Room = () => {
   const [videoUrl, setVideoUrl] = React.useState("") //
   const [playing, setPlaying] = React.useState(true)
-  // const [roomCode, setRoomCode] = React.useState("")
   const [numberParticipant, setNumberParticipant] = React.useState(0)
+  const [control, setControl] = React.useState(true)
   const player = React.useRef() //use to access react-player's instance method
   const { id } = useParams()
 
@@ -39,9 +40,9 @@ export const Room = () => {
   //   socket.emit("playingStateVideoChanged")
   // }
 
-  const setVideoPlayingState = () => {
-    setPlaying(!playing)
-  }
+  // const setVideoPlayingState = () => {
+  //   setPlaying(!playing)
+  // }
 
   //Remove event when press shift key make new line in textarea
 
@@ -71,14 +72,11 @@ export const Room = () => {
       socket.emit("leaveRoom", ROOMCODE)
       // socket.off('setVideoPlayingState', setVideoPlayingState)
     }
-  }, [])
+  }, [id])
 
   return (
     <>
       <div className="video-chat">
-        <div className="participant">
-          <div></div>
-        </div>
         <div className="video">
           <input type="text" value={videoUrl} onChange={handleVideoUrlChange}></input>
           <ReactPlayer
@@ -93,11 +91,15 @@ export const Room = () => {
         </div>
         <div className="chat">
           <div className="control">
-            <div className="chat-control">Chat</div>
-            <div className="joiner-control">Participant</div>
+            <button className="chat-control" onClick={() => setControl(!control)}>
+              Chat
+            </button>
+            <button className="joiner-control" onClick={() => setControl(!control)}>
+              Participant
+            </button>
           </div>
           <div className="chat-ui">
-            <Chat socket={socket} id={id} />
+            {control ? <Participant /> : <Chat socket={socket} id={id} />}
           </div>
         </div>
       </div>
