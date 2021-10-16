@@ -2,6 +2,7 @@ import React from "react"
 import "./Index.css"
 import { useHistory } from "react-router"
 import { nanoid } from "nanoid"
+import axios from "axios"
 
 export const Index = () => {
   const [roomCodeTest, setRoomCodeTest] = React.useState("")
@@ -11,8 +12,14 @@ export const Index = () => {
     roomCodeTest && history.push(`/room/${roomCodeTest}`)
   }
 
-  const handleCreateRoom = () => {
-    history.push(`/room/${nanoid(12)}`)
+  const handleCreateRoom = async () => {
+    try {
+      const roomID = nanoid(12)
+      const response = await axios.post("http://localhost:5000/room/create", { roomID })
+      response.status === 200 && history.push(`/room/${roomID}`)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (

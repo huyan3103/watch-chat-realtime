@@ -1,17 +1,17 @@
 import React from "react"
 import "./Room.css"
 
-export const Participant = () => {
-  const [users, setUsers] = React.useState([])
+export const Participant = ({ participants }) => {
+  console.log(participants)
   return (
     <div className="participant">
-      {users.map((user) => {
+      {participants.map((user, index) => {
         return (
-          <div className="user">
+          <div className="user" key={index}>
             <div className="avatar">
-              <img alt={`${user.name} avatar`} src={user.avatar}></img>
+              <img alt={`${user.username} avatar`} src={user.url}></img>
             </div>
-            <div className="name">{user.name}</div>
+            <div className="name">{user.username}</div>
           </div>
         )
       })}

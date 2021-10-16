@@ -5,7 +5,7 @@ const app = express()
 const cors = require("cors")
 const { Server } = require("socket.io")
 const accountRoute = require("./Route/accountRoute")
-
+const roomRoute = require("./Route/roomRoute")
 // console.log(process.env.DB_STRING)
 
 mongoose.connect("mongodb://localhost:27017/watch-chat-realtime", {
@@ -44,7 +44,10 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (room) => {
     socket.join(room)
     const numberClient = io.sockets.adapter.rooms.get(room).size
-    io.to(room).emit("numberParticipantChange", numberClient)
+    io.to(room).emit("participantChange", {
+      username: `An ${Math.floor(Math.random() * 13)}`,
+      url: "https://images.unsplash.com/photo-1628260412297-a3377e45006f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1074&q=80",
+    })
   })
 
   socket.on("leaveRoom", (room) => {
@@ -59,3 +62,4 @@ io.on("connection", (socket) => {
 })
 
 app.use("/account", accountRoute)
+app.use("/room", roomRoute)

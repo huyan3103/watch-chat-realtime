@@ -10,7 +10,7 @@ const socket = io("localhost:5000", { withCredentials: true })
 export const Room = () => {
   const [videoUrl, setVideoUrl] = React.useState("") //
   const [playing, setPlaying] = React.useState(true)
-  const [numberParticipant, setNumberParticipant] = React.useState(0)
+  const [participants, setparticipants] = React.useState([])
   const [control, setControl] = React.useState(true)
   const player = React.useRef() //use to access react-player's instance method
   const { id } = useParams()
@@ -50,8 +50,9 @@ export const Room = () => {
     navigator.clipboard.writeText(id)
   }
 
-  const handleNumberParticipantChange = (numberClient) => {
-    setNumberParticipant(numberClient)
+  const handleParticipantsChange = (newParticipants) => {
+    console.log(1)
+    setparticipants((prevState) => [...prevState, newParticipants])
   }
 
   //Auto scroll to the bottom of the chat box
@@ -63,7 +64,7 @@ export const Room = () => {
     socket.emit("joinRoom", id)
     socket.on("setVideoUrl", setVideoUrl)
     socket.on("setVideoTime", setVideoTime)
-    socket.on("numberParticipantChange", handleNumberParticipantChange)
+    socket.on("participantChange", handleParticipantsChange)
     // socket.on('setVideoPlayingState', setVideoPlayingState)
 
     return () => {
@@ -95,11 +96,15 @@ export const Room = () => {
               Chat
             </button>
             <button className="joiner-control" onClick={() => setControl(!control)}>
-              Participant
+              participants
             </button>
           </div>
           <div className="chat-ui">
-            {control ? <Participant /> : <Chat socket={socket} id={id} />}
+            {control ? (
+              <Participant participants={participants} />
+            ) : (
+              <Chat socket={socket} id={id} />
+            )}
           </div>
         </div>
       </div>
@@ -112,7 +117,7 @@ export const Room = () => {
         </button>
       </div>
       <div>
-        <p>Số lượng: {numberParticipant}</p>
+        <p>Số lượng: {participants.length}</p>
         <p>Sẵn sàng: </p>
       </div>
     </>
