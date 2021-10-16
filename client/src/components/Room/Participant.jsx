@@ -1,8 +1,7 @@
-import React from "react"
-import "./Room.css"
+import React from 'react'
+import './Room.css'
 
 export const Participant = ({ participants }) => {
-  console.log(participants)
   return (
     <div className="participant">
       {participants.map((user, index) => {

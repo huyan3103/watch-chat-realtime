@@ -1,25 +1,26 @@
-import React from "react"
+import React from 'react'
 
 export const Chat = ({ socket, id }) => {
   const [messages, setMessages] = React.useState([])
-  const [chat, setChat] = React.useState("")
+  const [chat, setChat] = React.useState('')
   const boxChat = React.useRef()
 
   const handleChatCame = ({ username, chat }) => {
+    console.log(username, chat)
     setMessages((prevState) => [...prevState, { username, chat }])
   }
 
   const handleSendMess = (e) => {
     e.preventDefault()
     if (chat) {
-      setMessages([...messages, { username: "An", chat }])
-      setChat("")
-      socket.emit("chatSend", { room: id, username: "An", chat })
+      setMessages([...messages, { username: 'An', chat }])
+      socket.emit('chatSend', { room: id, username: 'An', chat })
+      setChat('')
     }
   }
 
   const handleChatKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMess(e)
     }
@@ -30,11 +31,11 @@ export const Chat = ({ socket, id }) => {
   }, [messages])
 
   React.useEffect(() => {
-    socket.on("chatCame", handleChatCame)
+    socket.on('chatCame', handleChatCame)
     return () => {
-      socket.off("chatCame", handleChatCame)
+      socket.off('chatCame', handleChatCame)
     }
-  })
+  }, [])
 
   return (
     <>

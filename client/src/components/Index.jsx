@@ -8,8 +8,17 @@ export const Index = () => {
   const [roomCodeTest, setRoomCodeTest] = React.useState("")
   const history = useHistory()
 
-  const handleJoinRoom = () => {
-    roomCodeTest && history.push(`/room/${roomCodeTest}`)
+  const handleJoinRoom = async () => {
+    try {
+      if (roomCodeTest) {
+        const response = await axios.post("http://localhost:5000/room/check", {
+          roomID: roomCodeTest,
+        })
+        response.data == "OK" ? history.push(`/room/${roomCodeTest}`) : console.log(response.data)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const handleCreateRoom = async () => {
