@@ -2,6 +2,7 @@
   display: flex;
   gap: 20px;
   height: fit-content;
+  justify-content: center;
 }
 
 .video {
@@ -81,6 +82,7 @@
 .room-code {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   width: 380px;
   margin-top: 50px;

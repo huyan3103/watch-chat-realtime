@@ -5,27 +5,36 @@ import { Participant } from './Participant'
 import ReactPlayer from 'react-player/youtube'
 import io from 'socket.io-client'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 const socket = io('localhost:5000', { withCredentials: true })
 
 export const Room = () => {
   const [videoUrl, setVideoUrl] = React.useState('') //
   const [playing, setPlaying] = React.useState(true)
-  const [participants, setparticipants] = React.useState([])
+  const [participants, setParticipants] = React.useState([])
   const [control, setControl] = React.useState(true)
   const player = React.useRef() //use to access react-player's instance method
   const { id } = useParams()
   const testUsername = React.useRef(`An ${Math.floor(Math.random() * 21)}`)
 
   //set video url and send url to another clients
-  const handleVideoUrlChange = (e) => {
+  const handleVideoUrlChange = async (e) => {
     setVideoUrl(e.target.value.split('&')[0])
-    socket.emit('videoUrlChanged', { room: id, url: e.target.value.split('&')[0] })
+    const response = await axios.post(`http://localhost:5000/room/${id}`, {
+      videoUrl: e.target.value.split('&')[0],
+    })
+    response.status === 200 &&
+      socket.emit('videoUrlChanged', { room: id, url: e.target.value.split('&')[0] })
   }
 
   const handleOnBuffer = () => {
     const currentTime = Math.trunc(player.current.getCurrentTime())
     const loadedTime = Math.trunc(player.current.getSecondsLoaded())
     socket.emit('videoTimeChanged', { room: id, currentTime, loadedTime })
+  }
+
+  const pauseVideo = () => {
+    setPlaying(false)
   }
 
   const setVideoTime = (time) => {
@@ -38,8 +47,14 @@ export const Room = () => {
 
   const handleParticipantsChange = ({ action, username, url }) => {
     action === 'join'
-      ? setparticipants((prevState) => [...prevState, { username, url }])
-      : setparticipants((prevState) => prevState.filter((user) => user.username !== username))
+      ? setParticipants((prevState) => [...prevState, { username, url }])
+      : setParticipants((prevState) => prevState.filter((user) => user.username !== username))
+  }
+
+  const getRoomData = async () => {
+    const response = await axios.get(`htpp://localhost:5000/room/${id}`)
+    setParticipants(response.data.participants)
+    setVideoUrl(response.data.videoUrl)
   }
 
   //Connect to socket when component mount and disconnect when component unmount
@@ -50,6 +65,7 @@ export const Room = () => {
     socket.on('setVideoUrl', setVideoUrl)
     socket.on('setVideoTime', setVideoTime)
     socket.on('participantChange', handleParticipantsChange)
+    socket.on('pauseVideo', pauseVideo)
     // socket.on('setVideoPlayingState', setVideoPlayingState)
 
     return () => {
@@ -63,16 +79,21 @@ export const Room = () => {
 
   return (
     <>
-      <div className="video-chat">
+      <div className="video-chat pt-6">
         <div className="video">
-          <input type="text" value={videoUrl} onChange={handleVideoUrlChange}></input>
+          <input
+            className="border border-gray-900 focus:outline-none px-1"
+            type="text"
+            value={videoUrl}
+            onChange={handleVideoUrlChange}
+          ></input>
           <ReactPlayer
             ref={player}
             url={videoUrl}
             playing={playing}
             controls={true}
             onBuffer={handleOnBuffer}
-            // onPause={handlePauseVideo}
+            // onPause={handleOnPause}
             style={{ backgroundColor: 'gray' }}
           />
         </div>

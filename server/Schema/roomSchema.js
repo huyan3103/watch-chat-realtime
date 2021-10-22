@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const roomSchema = new Schema({
@@ -19,5 +19,5 @@ const roomSchema = new Schema({
   participants: [String],
 })
 
-const Room = mongoose.model("room", roomSchema)
+const Room = mongoose.model('room', roomSchema)
 module.exports = Room
