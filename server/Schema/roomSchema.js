@@ -16,7 +16,7 @@ const roomSchema = new Schema({
   },
   owner: String,
   videoURL: String,
-  participants: [String],
+  participants: [Object],
 })
 
 const Room = mongoose.model('room', roomSchema)

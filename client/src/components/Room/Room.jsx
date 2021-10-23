@@ -71,7 +71,7 @@ export const Room = () => {
     return () => {
       socket.off('setVideoUrl', setVideoUrl)
       socket.off('setVideoTime', setVideoTime)
-      socket.emit('leaveRoom', { ROOMCODE, username: testUsername.current })
+      socket.emit('leaveRoom', { room: ROOMCODE, username: testUsername.current })
       testUsername.current = ''
       // socket.off('setVideoPlayingState', setVideoPlayingState)
     }

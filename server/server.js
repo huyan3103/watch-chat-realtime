@@ -6,6 +6,7 @@ const cors = require('cors')
 const { Server } = require('socket.io')
 const accountRoute = require('./Route/accountRoute')
 const roomRoute = require('./Route/roomRoute')
+const Room = require('./Schema/roomSchema')
 // console.log(process.env.DB_STRING)
 
 mongoose.connect('mongodb://localhost:27017/watch-chat-realtime', {
@@ -39,9 +40,8 @@ io.on('connection', (socket) => {
   //   socket.to(room).emit("setVideoPlayingState")
   // })
 
-  socket.on('joinRoom', ({ room, username }) => {
+  socket.on('joinRoom', async ({ room, username }) => {
     socket.join(room)
-    console.log(1)
     // const numberClient = io.sockets.adapter.rooms
     io.to(room).emit('participantChange', {
       action: 'join',
@@ -51,13 +51,14 @@ io.on('connection', (socket) => {
     io.to(room).emit('pauseVideo')
   })
 
-  socket.on('leaveRoom', ({ room, username }) => {
+  socket.on('leaveRoom', async ({ room, username }) => {
     socket.leave(room)
     const numberClient = io.sockets.adapter.rooms.get(room)?.size
     io.to(room).emit('participantChange', {
       action: 'leave',
       username,
     })
+    numberClient === undefined && (await Room.deleteOne({ id: room }))
   })
 
   socket.on('chatSend', ({ room, username, chat }) => {
