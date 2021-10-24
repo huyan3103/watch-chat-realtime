@@ -9,10 +9,10 @@ const Header = () => {
           WATCHAT
         </Link>
       </div>
-      <div className="flex ml-auto mr-10 gap-8">
+      {/* <div className="flex ml-auto mr-10 gap-8">
         <p>Đăng Nhập</p>
         <p>Đăng Ký</p>
-      </div>
+      </div> */}
     </div>
   )
 }

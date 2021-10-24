@@ -1,11 +1,10 @@
 import React from 'react'
 import './Index.css'
 import { useHistory } from 'react-router'
-import Header from '../Header/Header'
 import { nanoid } from 'nanoid'
 import axios from 'axios'
 
-export const Index = () => {
+const Index = () => {
   const [roomCodeTest, setRoomCodeTest] = React.useState('')
   const history = useHistory()
 
@@ -33,26 +32,35 @@ export const Index = () => {
   }
 
   return (
-    <>
-      <Header />
-      <div className="flex flex-col items-center">
-        <div className="join-room">
-          <input
-            type="text"
-            placeholder="Mã Phòng"
-            value={roomCodeTest}
-            onChange={(e) => setRoomCodeTest(e.target.value)}
-          ></input>
-          <button type="button" onClick={handleJoinRoom}>
-            Vào
-          </button>
+    <div className="flex flex-col items-center mt-6">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-2">
+          <img src="" alt="" className="h-20 w-20 border border-gray-900"></img>
+          <input type="text" className="border border-gray-900 focus:outline-none"></input>
         </div>
-        <div className="create-room">
-          <button type="button" onClick={handleCreateRoom}>
-            Tạo Phòng
-          </button>
+        <div className="flex flex-col items-center">
+          <span>Tên</span>
+          <input type="text" className="border border-gray-900 focus:outline-none"></input>
         </div>
       </div>
-    </>
+      <div className="join-room">
+        <input
+          type="text"
+          placeholder="Mã Phòng"
+          value={roomCodeTest}
+          onChange={(e) => setRoomCodeTest(e.target.value)}
+        ></input>
+        <button type="button" onClick={handleJoinRoom}>
+          Vào
+        </button>
+      </div>
+      <div className="create-room">
+        <button type="button" onClick={handleCreateRoom}>
+          Tạo Phòng
+        </button>
+      </div>
+    </div>
   )
 }
+
+export default Index
