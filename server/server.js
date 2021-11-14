@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost:27017/watch-chat-realtime', {
   useUnifiedTopology: true,
 })
 
-app.use(cors({ origin: '*' }))
+app.use(cors({ origin: '*', credentials: true }))
 app.use(express.json())
 
 // app.get("/", (req, res) => {

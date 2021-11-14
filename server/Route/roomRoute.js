@@ -42,8 +42,12 @@ route.post('/join', async (req, res) => {
 
 route.get('/:id', async (req, res) => {
   try {
+    console.log(req.params.id)
     const existRoom = await Room.findOne({ id: req.params.id })
-    res.status(200).json({ participants: existRoom.participants, videoUrl: existRoom.videoUrl })
+    console.log(existRoom)
+    res
+      .status(200)
+      .json({ participants: existRoom.participants, videoUrl: existRoom.videoUrl || '' })
   } catch (err) {
     console.log(err)
   }

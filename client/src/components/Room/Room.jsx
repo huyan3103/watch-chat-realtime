@@ -52,10 +52,23 @@ export const Room = () => {
   }
 
   const getRoomData = async () => {
-    const response = await axios.get(`htpp://localhost:5000/room/${id}`)
-    setParticipants(response.data.participants)
-    setVideoUrl(response.data.videoUrl)
+    try {
+      const response = await axios.get(`http://localhost:5000/room/${id}`)
+      setParticipants(response.data.participants)
+      setVideoUrl(response.data.videoUrl)
+    } catch (err) {
+      console.log(err)
+    }
   }
+
+  React.useEffect(() => {
+    const sessionStorage = window.sessionStorage
+    console.log(sessionStorage.getItem('ACTION'))
+    sessionStorage.getItem('ACTION') === 'JOIN' && getRoomData()
+    return () => {
+      sessionStorage.clear()
+    }
+  }, [])
 
   //Connect to socket when component mount and disconnect when component unmount
   React.useEffect(() => {

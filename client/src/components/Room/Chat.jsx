@@ -35,7 +35,7 @@ export const Chat = ({ socket, id }) => {
     return () => {
       socket.off('chatCame', handleChatCame)
     }
-  }, [])
+  }, [socket])
 
   return (
     <>
